@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Frontend (React/Vite)
+dist/
+dist-ssr/
+build/
+coverage/
+*.local
+
+# Backend (Laravel)
+backend/public/storage
+backend/public/hot
+backend/public/build
+backend/storage/*.key
+backend/storage/oauth-private.key
+backend/storage/oauth-public.key
+backend/.phpunit.result.cache
+backend/Homestead.json
+backend/Homestead.yaml
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# OS & Editor
+.DS_Store
+.idea/
+.vscode/
+
+# Env files
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+backend/!.env.example

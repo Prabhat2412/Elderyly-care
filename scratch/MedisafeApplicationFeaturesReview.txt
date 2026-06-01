@@ -1,0 +1,69 @@
+Medisafe
+The app begins with a simple onboarding process where users are asked to create an account
+or continue as a guest. Users can enter basic details such as their name and preferred time
+format. The app then prompts users to add their first medication, guiding them step-by-step to
+ensure reminders are set up correctly. Notification permissions are requested early to enable
+timelyalerts.
+
+-- 1 of 4 --
+
+
+
+-- 2 of 4 --
+
+Once onboarding is complete
+Users are taken to the main dashboard, which presents their daily medication schedule in a
+clear and organized timeline view.
+Categories
+• Medications — for adding, managing, and tracking medication intake
+• Schedule — displays daily and upcoming doses in a timeline format
+• Medfriends — allows users to connect with family or caregivers for support
+• Reports — provides adherence reports and medication history
+Adding a Medication
+Users have multiple ways to add a medication:
+• Search by name — find medication from a database
+• Manual entry — add custom medication details
+• Scan option — scan medication packaging (available in some regions)
+When adding a medication, the app walks the user through a detailed setup:
+• Dosage — amount and unit of medication
+• Frequency — daily, weekly, or custom schedule
+• Time — specific times for reminders
+• Instructions — before/after food or special notes
+• Start and end date — duration of medication
+Schedule Section
+The schedule interface displays medications in a chronological timeline for the day. Each
+entry includes:
+• Medication name
+• Dosage
+• Time
+• Status (taken, missed, skipped)
+Users can mark medications as taken directly from this screen, making it quick and
+interactive.
+Medfriends Section
+This feature allows users to add trusted contacts (family members or caregivers) who can:
+
+-- 3 of 4 --
+
+• Receive alerts if a dose is missed
+• Monitor adherence remotely
+This adds a social and safety layer to the app.
+Reports Section
+The reports section provides insights into medication adherence over time. Users can view:
+• Daily and weekly adherence rates
+• Missed doses
+• Medication history
+Reports can also be shared with healthcare professionals.
+Home Screen
+After setup, users land on the main home screen which shows:
+• A daily timeline of medications
+• Progress indicators for completed doses
+• Quick action buttons to add medication
+Navigation
+The app is organized through a bottom navigation bar with the following sections:
+• Today — shows all medications scheduled for the day
+• Medications — list of all added medications
+• Medfriends — caregiver and family connections
+• More — settings, reports, and additional features
+
+-- 4 of 4 --
+

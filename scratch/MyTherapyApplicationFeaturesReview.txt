@@ -1,0 +1,75 @@
+MyTherapy
+The app begins with a consent screen before collecting any information. Once accepted, users are guided
+through a step-by-step setup — entering their name, followed by their birth year and gender. After the
+profile is created, users can personalise their experience by selecting a reminder tone and granting
+notification permissions.
+
+-- 1 of 8 --
+
+Once onboarding is complete, users are taken to the main dashboard where the core wellness categories
+are presented, each of which can be individually set up and customised.
+Categories
+• Medication — for setting up and managing medication reminders and tracking
+• Measurements — for logging and monitoring health metrics
+• Activities — for tracking daily physical and lifestyle activities
+• Mood & Symptom — for recording emotional state and any symptoms experienced
+Opening the medication section begins with asking what time the user typically takes their first medication
+of the day, helping the app establish a personalised reminder schedule from the start.
+Adding a Medication Users have multiple ways to add a medication:
+• Barcode scan — scan the medication packaging directly
+• Search by name — look up the medication manually
+• Scan a medication plan — scan an existing prescription or medication plan document
+When adding via search, the app walks the user through a detailed setup:
+• Who it's for — the medication can be assigned to a specific profile
+• Frequency — how often the medication is taken
+• Reminder time — when the user would like to be reminded to take it
+• Refill reminder — option to set an alert when inventory is running low
+• Reason for taking — the symptom or condition the medication is addressing
+
+-- 2 of 8 --
+
+The measurements section offers a wide range of health metrics that users can track. These include
+common vitals and body measurements such as blood pressure, heart rate, temperature, weight, and
+more, giving users a comprehensive way to monitor their physical health over time.
+When adding a measurement, users can configure how often they want to take a reading and set a specific
+time to be reminded — helping them build a consistent health monitoring routine
+
+-- 3 of 8 --
+
+The activities section presents a broad range of daily living activities organised in alphabetical order, making
+it easy to find and select what is relevant to the user. Similar to measurements, once an activity is selected,
+users can configure how frequently it should be done and set a preferred reminder time to stay on track.
+
+-- 4 of 8 --
+
+Example: Food intake, Water Intake
+
+-- 5 of 8 --
+
+The mood and symptom section allows users to log their emotional state and any symptoms they are
+experiencing. Similar to the other sections, users can set how frequently they would like to be prompted
+and choose a preferred time for the reminder, helping them maintain a consistent daily check-in habit.
+Once all categories are configured, users can how many reminders have been set under each category.
+When satisfied, they can press "All Set" to complete the setup and move into the app.
+
+-- 6 of 8 --
+
+After setup, users land on the main home screen which displays a date bar at the top for easy navigation
+across days. A welcome message greets the user, followed by a clear overview of all their daily plans and
+scheduled reminders for the day.
+The app is organised through a bottom navigation bar with the following sections:
+• Today — displays all reminders due for the day along with quick options to add a doctor
+appointment, set a reminder, or document other entries as well.
+• Progress — allows users to track their overall adherence and health progress over time
+• Support — features the Mighty chatbot, powered by OpenAI, where users can have health-related
+conversations. This section also allows users to add a pharmacy and healthcare professionals to
+their profile
+• Treatment — a dedicated section for managing the full treatment plan, including adding
+medications, checking drug interactions, editing reminders, and accessing an e-prescription feature
+
+-- 7 of 8 --
+
+
+
+-- 8 of 8 --
+

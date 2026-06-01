@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #f43f5e;
+  --color-secondary: #4f46e5;
+  --color-accent: #8b5cf6;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-background: #fdfcfc;
+  --color-surface: #ffffff;
+  
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-3xl: 40px;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-gray-900 font-sans antialiased selection:bg-rose-100;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-xl shadow-gray-200/50;
+  }
+  
+  .btn-primary {
+    @apply px-6 py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-rose-200 
+           active:scale-[0.98] transition-all hover:bg-rose-600 hover:shadow-rose-300;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-4 bg-white text-gray-700 font-bold rounded-2xl border border-gray-100 
+           active:scale-[0.98] transition-all hover:bg-gray-50;
+  }
+
+  .elder-btn {
+    @apply py-8 text-2xl font-black rounded-3xl transition-all active:scale-95 shadow-xl;
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
