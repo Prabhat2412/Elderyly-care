@@ -24,7 +24,7 @@ class User extends Authenticatable
     public function patients()
     {
         return $this->belongsToMany(User::class, 'user_relationships', 'relative_id', 'user_id')
-                    ->where('relation_type', 'caretaker');
+                    ->whereIn('relation_type', ['caretaker', 'family']);
     }
 
     /**

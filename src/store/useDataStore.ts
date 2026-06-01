@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import api from '../lib/api';
-import { DailyCheckIn, CaregiverAlert, DailyTask } from '../types';
+import { DailyCheckIn, CaregiverAlert, DailyTask, TimelineEvent } from '../types';
 import { VitalReadingPayload } from '../lib/vitalMetrics';
 import { shouldAutoMiss } from '../lib/taskTiming';
 import toast from 'react-hot-toast';
@@ -46,6 +46,9 @@ interface DataState {
   fetchAiSummary: (userId: number) => Promise<void>;
   safeZoneActive: boolean;
   toggleSafeZone: () => void;
+  timelineEvents: TimelineEvent[];
+  timelineLoading: boolean;
+  fetchTimeline: (patientId: number, date?: string) => Promise<void>;
 }
 
 function normalizeAlert(alert: any): CaregiverAlert {
@@ -68,6 +71,8 @@ export const useDataStore = create<DataState>((set, get) => ({
   schedules: [],
   isLoading: false,
   safeZoneActive: true,
+  timelineEvents: [],
+  timelineLoading: false,
 
   toggleSafeZone: () => {
     const currentState = get().safeZoneActive;
@@ -427,6 +432,19 @@ export const useDataStore = create<DataState>((set, get) => ({
       set({ aiSummary: response.data });
     } catch (error) {
       console.error('Failed to fetch AI summary', error);
+    }
+  },
+
+  fetchTimeline: async (patientId, date) => {
+    set({ timelineLoading: true });
+    try {
+      const params: Record<string, string> = {};
+      if (date) params.date = date;
+      const response = await api.get(`/patients/${patientId}/timeline`, { params });
+      set({ timelineEvents: response.data, timelineLoading: false });
+    } catch (error) {
+      console.error('Failed to fetch timeline', error);
+      set({ timelineLoading: false });
     }
   },
 }));

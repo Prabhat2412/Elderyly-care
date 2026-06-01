@@ -51,7 +51,7 @@ class TaskMissService
 
         $message = "{$prefix}: {$title}";
 
-        foreach (['caregiver', 'child'] as $role) {
+        foreach (['caregiver', 'family'] as $role) {
             $exists = Alert::where('user_id', $userId)
                 ->where('type', $alertType)
                 ->where('target_role', $role)

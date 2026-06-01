@@ -363,7 +363,7 @@ class RoutineScheduleController extends Controller
 
         $markedBy = $request->user()->id === $schedule->user_id
             ? 'elderly'
-            : ($request->user()->role === 'child' ? 'child' : 'caregiver');
+            : ($request->user()->role === 'family' ? 'family' : 'caregiver');
 
         if ($request->boolean('auto')) {
             $markedBy = 'auto';

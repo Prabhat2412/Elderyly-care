@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('task_id');
             $table->time('scheduled_time');
             $table->date('missed_at_date');
-            $table->string('marked_by')->default('elderly'); // elderly, auto, caregiver, child
+            $table->string('marked_by')->default('elderly'); // elderly, auto, caregiver, family
             $table->timestamps();
 
             $table->unique(

@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patients', [PatientController::class, 'index']);
     Route::get('/patients/{patient}', [PatientController::class, 'show']);
     Route::get('/patients/{patient}/ai-summary', [PatientController::class, 'aiSummary']);
+    Route::get('/patients/{patient}/timeline', [PatientController::class, 'timeline']);
     Route::post('/patients/{patient}/chatbot', [\App\Http\Controllers\ChatbotController::class, 'chat']);
     Route::post('/patients/active', [PatientController::class, 'setActive']);
 

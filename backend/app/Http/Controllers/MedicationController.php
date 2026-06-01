@@ -162,7 +162,7 @@ class MedicationController extends Controller
         $title = "Take {$medication->name} ({$medication->dosage})";
         $markedBy = $request->user()->id === $medication->user_id
             ? 'elderly'
-            : ($request->user()->role === 'child' ? 'child' : 'caregiver');
+            : ($request->user()->role === 'family' ? 'family' : 'caregiver');
 
         if ($request->boolean('auto')) {
             $markedBy = 'auto';

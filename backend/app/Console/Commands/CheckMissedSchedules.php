@@ -90,7 +90,7 @@ class CheckMissedSchedules extends Command
         $tiers = [
             ['minutes' => 15, 'role' => 'elderly', 'type' => 'pre_reminder', 'msg' => "Upcoming: $title at $time"],
             ['minutes' => -15, 'role' => 'elderly', 'type' => 'post_reminder', 'msg' => "Missed: Please do $title now."],
-            ['minutes' => -30, 'role' => 'child', 'type' => 'family_alert', 'msg' => "Warning: Patient missed $title."],
+            ['minutes' => -30, 'role' => 'family', 'type' => 'family_alert', 'msg' => "Warning: Patient missed $title."],
             ['minutes' => -60, 'role' => 'caregiver', 'type' => "missed_$taskType", 'msg' => "CRITICAL: Patient missed $title by over an hour."]
         ];
 

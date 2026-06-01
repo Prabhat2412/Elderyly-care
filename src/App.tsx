@@ -30,13 +30,14 @@ import { NextMedicationCard } from './components/NextMedicationCard';
 import { LiveCountdown } from './components/LiveCountdown';
 import { taskRequiresReading, VitalReadingPayload } from './lib/vitalMetrics';
 import { DailyTask } from './types';
+import { TimelineView } from './components/TimelineView';
 
 export default function App() {
   const { user, login, register, logout, isAuthenticated, isInitialized } = useAuthStore();
   const { medications, checkins, alerts, fetchMeds, fetchPatients, setActivePatient, patients, activePatient, addCheckin, triggerEmergency, fetchProfile, medicalProfile, fetchAlerts, fetchSchedules, processAutoMissedTasks } = useDataStore();
 
   const [showLanding, setShowLanding] = useState(!isAuthenticated);
-  const [view, setView] = useState<'home' | 'checkin' | 'meds' | 'dashboard' | 'alerts' | 'family' | 'profile' | 'landing'>('home');
+  const [view, setView] = useState<'home' | 'checkin' | 'meds' | 'dashboard' | 'alerts' | 'family' | 'profile' | 'landing' | 'timeline'>('home');
   const [showCheckinSuccess, setShowCheckinSuccess] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
@@ -45,16 +46,13 @@ export default function App() {
     if (isAuthenticated) {
       setShowLanding(false);
       if (user) {
-        if (user.role === 'caregiver') {
+        if (user.role === 'caregiver' || user.role === 'family') {
           fetchPatients();
           fetchAlerts();
         } else if (user.role === 'elderly') {
           fetchMeds(user.id);
           fetchProfile(user.id);
           fetchSchedules(user.id);
-        } else {
-          fetchMeds(user.id);
-          fetchProfile(user.id);
         }
         // Ensure we go to a dashboard-appropriate view on login
         if (view === 'home' && user.role !== 'elderly') {
@@ -72,7 +70,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [isAuthenticated, user, processAutoMissedTasks]);
 
-  const handleAuth = async (isRegister: boolean, role: 'elderly' | 'caregiver' | 'child', email: string, pass: string, name?: string) => {
+  const handleAuth = async (isRegister: boolean, role: 'elderly' | 'caregiver' | 'family', email: string, pass: string, name?: string) => {
     try {
       if (isRegister) {
         await register({ name: name || '', email, pass, role });
@@ -230,6 +228,7 @@ function BottomNav({ role, currentView, setView }: { role: string, currentView: 
     { id: 'meds', icon: <Pill />, label: 'Meds' }
   ] : [
     { id: 'dashboard', icon: <LayoutDashboard />, label: 'Overview' },
+    { id: 'timeline', icon: <Clock />, label: 'Timeline' },
     { id: 'alerts', icon: <Bell />, label: 'Alerts' },
     { id: 'family', icon: <Activity />, label: 'Stats' }
   ];
@@ -253,12 +252,12 @@ function BottomNav({ role, currentView, setView }: { role: string, currentView: 
   );
 }
 
-function LoginScreen({ onAuth, onBack }: { onAuth: (isReg: boolean, role: 'elderly' | 'caregiver' | 'child', email: string, pass: string, name?: string) => void, onBack: () => void }) {
+function LoginScreen({ onAuth, onBack }: { onAuth: (isReg: boolean, role: 'elderly' | 'caregiver' | 'family', email: string, pass: string, name?: string) => void, onBack: () => void }) {
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState<'elderly' | 'caregiver' | 'child'>('elderly');
+  const [role, setRole] = useState<'elderly' | 'caregiver' | 'family'>('elderly');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -313,7 +312,7 @@ function LoginScreen({ onAuth, onBack }: { onAuth: (isReg: boolean, role: 'elder
           />
 
           <div className="grid grid-cols-3 gap-2 py-2">
-            {(['elderly', 'caregiver', 'child'] as const).map((r) => (
+            {(['elderly', 'caregiver', 'family'] as const).map((r) => (
               <button
                 key={r}
                 type="button"
@@ -875,6 +874,10 @@ function CaregiverDashboard({ view, setView, checkins, alerts, medications }: {
           </div>
         </div>
         <div className="flex gap-2 self-end sm:self-auto">
+          <button
+            onClick={() => setView('timeline')}
+            className={cn("p-3 border rounded-2xl shadow-sm transition-colors", view === 'timeline' ? "bg-rose-50 border-rose-200 text-rose-500" : "bg-white border-gray-100 text-gray-400")}
+          ><Clock className="w-5 h-5" /></button>
           <button className="p-3 bg-white border border-gray-100 rounded-2xl shadow-sm"><Phone className="w-5 h-5 text-gray-400" /></button>
           <button
             onClick={() => setView('alerts')}
@@ -889,6 +892,8 @@ function CaregiverDashboard({ view, setView, checkins, alerts, medications }: {
       {/* View Switcher Logic */}
       {view === 'alerts' ? (
         <AlertsListView alerts={alerts} onResolve={(id) => useDataStore.getState().resolveAlert(id)} />
+      ) : view === 'timeline' ? (
+        <TimelineView patientId={activePatient?.id} patientName={activePatient?.name || 'Patient'} />
       ) : view === 'family' ? (
         <StatsView healthLogs={healthLogs} activePatient={activePatient} schedules={schedules} />
       ) : (
@@ -1545,7 +1550,10 @@ function FamilyDashboard({ view, setView, checkins, alerts, medications }: {
     .filter(m => m.next_dose)
     .sort((a, b) => dayjs(toLocalIso(a.next_dose)).diff(dayjs(toLocalIso(b.next_dose))))[0];
 
+  const { patients, activePatient } = useDataStore();
+
   if (view === 'alerts') return <AlertsListView alerts={alerts} onResolve={resolveAlert} />;
+  if (view === 'timeline') return <TimelineView patientId={activePatient?.id} patientName={activePatient?.name || 'Patient'} />;
   if (view === 'family') return <StatsView healthLogs={healthLogs} activePatient={null} schedules={schedules} />;
 
   return (
@@ -1580,6 +1588,14 @@ function FamilyDashboard({ view, setView, checkins, alerts, medications }: {
           <p className="text-[10px] text-gray-400 mt-2">Active Monitoring</p>
         </div>
       </div>
+
+      <button
+        onClick={() => setView('timeline')}
+        className="w-full py-5 bg-white border border-gray-100 rounded-[32px] font-bold shadow-sm flex items-center justify-center gap-3 active:scale-[0.98] transition-all hover:border-rose-200 hover:bg-rose-50 group"
+      >
+        <Clock className="w-6 h-6 text-rose-400 group-hover:text-rose-500 transition-colors" />
+        <span className="text-gray-700 group-hover:text-rose-600 transition-colors">View Activity Timeline</span>
+      </button>
 
       <button className="w-full py-6 bg-secondary text-white rounded-[32px] font-bold shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
         <Phone className="w-6 h-6" /> Video Call Relative

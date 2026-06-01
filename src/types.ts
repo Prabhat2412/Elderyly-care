@@ -33,7 +33,7 @@ export interface DailyTask {
   scheduled_time: string;
   is_completed: boolean;
   is_missed: boolean;
-  marked_by?: 'elderly' | 'auto' | 'caregiver' | 'child' | null;
+  marked_by?: 'elderly' | 'auto' | 'caregiver' | 'family' | null;
   minutes_past_due?: number;
   requires_reading?: boolean;
 }
@@ -51,9 +51,17 @@ export interface UserProfile {
   id: number;
   email: string;
   name: string;
-  role: 'elderly' | 'caregiver' | 'child';
+  role: 'elderly' | 'caregiver' | 'family';
   caregiverId?: string; // If role is elderly
-  elderlyIds?: string[]; // If role is caregiver or child
+  elderlyIds?: string[]; // If role is caregiver or family
   hospitalName?: string;
   hospitalContact?: string;
+}
+
+export interface TimelineEvent {
+  id: string;
+  type: 'completed_task' | 'missed_task' | 'health_log' | 'check_in' | 'alert';
+  title: string;
+  timestamp: string;
+  meta?: Record<string, any>;
 }

@@ -48,7 +48,7 @@ class HealthLogAlertService
         $patientName = $user?->name ?? 'Patient';
         $message = "CRITICAL: {$patientName} has out-of-range vitals! {$alertMsg}";
 
-        foreach (['caregiver', 'child'] as $role) {
+        foreach (['caregiver', 'family'] as $role) {
             Alert::create([
                 'user_id' => $log->user_id,
                 'type' => 'critical_vitals',

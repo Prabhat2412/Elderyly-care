@@ -24,13 +24,13 @@ class EmergencyController extends Controller
             'target_role' => 'caregiver'
         ]);
         
-        // Create an alert record for the child (family member)
+        // Create an alert record for the family (family member)
         \App\Models\Alert::create([
             'user_id' => $user->id,
             'type' => 'emergency',
             'message' => 'EMERGENCY: ' . $user->name . ' has requested help!',
             'resolved' => false,
-            'target_role' => 'child'
+            'target_role' => 'family'
         ]);
         
         return response()->json([

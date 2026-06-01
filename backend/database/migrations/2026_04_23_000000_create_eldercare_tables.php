@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('role')->default('elderly'); // elderly, caregiver, child
+            $table->string('role')->default('elderly'); // elderly, caregiver, family
             $table->unsignedBigInteger('caregiver_id')->nullable();
             $table->string('hospital_name')->nullable();
             $table->string('hospital_contact')->nullable();
