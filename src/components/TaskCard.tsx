@@ -18,6 +18,7 @@ import { LiveCountdown } from './LiveCountdown';
 import dayjs from 'dayjs';
 
 interface TaskCardProps {
+  key?: string | number;
   task: DailyTask;
   variant?: 'elderly' | 'caregiver';
   onComplete?: () => void | Promise<any>;

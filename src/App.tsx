@@ -414,156 +414,156 @@ function ElderlyFlow({ view, setView, onCheckin, onEmergency, checkins, medicati
 
   return (
     <>
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
-    >
-      <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors", safeZoneActive ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400")}>
-            <Home className="w-6 h-6" />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-6"
+      >
+        <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors", safeZoneActive ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400")}>
+              <Home className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="font-bold text-gray-800">Safe Zone (Home)</p>
+              <p className="text-xs text-gray-400 font-medium">{safeZoneActive ? "You are safely at home" : "You are currently away"}</p>
+            </div>
           </div>
-          <div>
-            <p className="font-bold text-gray-800">Safe Zone (Home)</p>
-            <p className="text-xs text-gray-400 font-medium">{safeZoneActive ? "You are safely at home" : "You are currently away"}</p>
-          </div>
+          <button
+            onClick={toggleSafeZone}
+            className={cn("px-4 py-2 rounded-xl font-bold text-sm transition-all active:scale-95", safeZoneActive ? "bg-gray-100 text-gray-600 hover:bg-gray-200" : "bg-green-500 text-white hover:bg-green-600")}
+          >
+            {safeZoneActive ? "I'm Leaving" : "I'm Back"}
+          </button>
         </div>
-        <button 
-          onClick={toggleSafeZone}
-          className={cn("px-4 py-2 rounded-xl font-bold text-sm transition-all active:scale-95", safeZoneActive ? "bg-gray-100 text-gray-600 hover:bg-gray-200" : "bg-green-500 text-white hover:bg-green-600")}
-        >
-          {safeZoneActive ? "I'm Leaving" : "I'm Back"}
-        </button>
-      </div>
 
-      {overdueTasks.length > 0 && (
-        <div className="bg-rose-100 border-l-4 border-rose-500 p-4 rounded-r-2xl mb-4 shadow-sm animate-pulse">
-          <div className="flex items-center gap-2 mb-2">
-            <AlertCircle className="w-5 h-5 text-rose-600" />
-            <span className="font-black text-rose-800 uppercase tracking-widest text-xs">Overdue Tasks</span>
+        {overdueTasks.length > 0 && (
+          <div className="bg-rose-100 border-l-4 border-rose-500 p-4 rounded-r-2xl mb-4 shadow-sm animate-pulse">
+            <div className="flex items-center gap-2 mb-2">
+              <AlertCircle className="w-5 h-5 text-rose-600" />
+              <span className="font-black text-rose-800 uppercase tracking-widest text-xs">Overdue Tasks</span>
+            </div>
+            <p className="text-rose-900 font-bold">You have {overdueTasks.length} overdue task{overdueTasks.length > 1 ? 's' : ''}. Please mark them as completed or missed.</p>
           </div>
-          <p className="text-rose-900 font-bold">You have {overdueTasks.length} overdue task{overdueTasks.length > 1 ? 's' : ''}. Please mark them as completed or missed.</p>
-        </div>
-      )}
+        )}
 
-      {activeReminders.length > 0 && (
-        <div className="bg-amber-100 border-l-4 border-amber-500 p-4 rounded-r-2xl mb-4 shadow-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <Bell className="w-5 h-5 text-amber-600 animate-pulse" />
-            <span className="font-black text-amber-800 uppercase tracking-widest text-xs">Reminder</span>
-          </div>
-          {activeReminders.map(r => (
-            <p key={r.id} className="text-amber-900 font-bold mb-1">{r.message}</p>
-          ))}
-        </div>
-      )}
-
-      <div className="bg-gradient-to-br from-rose-500 to-orange-400 p-6 sm:p-8 rounded-[40px] text-white shadow-2xl shadow-rose-200 relative overflow-hidden">
-        <div className="relative z-10">
-          <h2 className="text-4xl font-black mb-2">Good morning!</h2>
-          <p className="text-rose-100 text-lg font-medium opacity-90">
-            {pendingTasks.length > 0 ? `You have ${pendingTasks.length} tasks for today.` : "You're all caught up!"}
-          </p>
-
-          <div className="mt-8 space-y-3">
-            {pendingTasks.map((s: DailyTask) => (
-              <TaskCard
-                key={s.id}
-                task={s}
-                variant="elderly"
-                onComplete={() => completeTask(s.id, s.original_id, s.type, s.scheduled_time)}
-                onMiss={() => markTaskMissed(s.id, s.original_id, s.type, s.title, s.scheduled_time)}
-                onRecordReading={() => setVitalTask(s)}
-              />
+        {activeReminders.length > 0 && (
+          <div className="bg-amber-100 border-l-4 border-amber-500 p-4 rounded-r-2xl mb-4 shadow-sm">
+            <div className="flex items-center gap-2 mb-2">
+              <Bell className="w-5 h-5 text-amber-600 animate-pulse" />
+              <span className="font-black text-amber-800 uppercase tracking-widest text-xs">Reminder</span>
+            </div>
+            {activeReminders.map(r => (
+              <p key={r.id} className="text-amber-900 font-bold mb-1">{r.message}</p>
             ))}
-            {pendingTasks.length === 0 && (
-              <div className="p-6 bg-white/10 rounded-2xl text-center border border-white/10">
-                <Smile className="w-10 h-10 mx-auto mb-2 opacity-50" />
-                <p className="font-bold">Everything is done for now!</p>
+          </div>
+        )}
+
+        <div className="bg-gradient-to-br from-rose-500 to-orange-400 p-6 sm:p-8 rounded-[40px] text-white shadow-2xl shadow-rose-200 relative overflow-hidden">
+          <div className="relative z-10">
+            <h2 className="text-4xl font-black mb-2">Good morning!</h2>
+            <p className="text-rose-100 text-lg font-medium opacity-90">
+              {pendingTasks.length > 0 ? `You have ${pendingTasks.length} tasks for today.` : "You're all caught up!"}
+            </p>
+
+            <div className="mt-8 space-y-3">
+              {pendingTasks.map((s: DailyTask) => (
+                <TaskCard
+                  key={s.id}
+                  task={s}
+                  variant="elderly"
+                  onComplete={() => completeTask(s.id, s.original_id, s.type, s.scheduled_time)}
+                  onMiss={() => markTaskMissed(s.id, s.original_id, s.type, s.title, s.scheduled_time)}
+                  onRecordReading={() => setVitalTask(s)}
+                />
+              ))}
+              {pendingTasks.length === 0 && (
+                <div className="p-6 bg-white/10 rounded-2xl text-center border border-white/10">
+                  <Smile className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                  <p className="font-bold">Everything is done for now!</p>
+                </div>
+              )}
+            </div>
+
+            {/* Missed Tasks Summary */}
+            {missedTasks.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-white/20">
+                <p className="text-xs font-black uppercase tracking-widest text-rose-200 mb-3">Missed Today ({missedTasks.length})</p>
+                {missedTasks.map(s => (
+                  <div key={s.id} className="flex items-center gap-3 py-2 opacity-60">
+                    <XCircle className="w-5 h-5 text-rose-200" />
+                    <span className="font-bold text-sm line-through">{s.title}</span>
+                    <span className="text-xs opacity-70 ml-auto">{s.scheduled_time.substring(0, 5)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Completed Tasks Summary */}
+            {completedTasks.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-white/20">
+                <p className="text-xs font-black uppercase tracking-widest text-green-200 mb-3">Completed ({completedTasks.length})</p>
+                {completedTasks.map(s => (
+                  <div key={s.id} className="flex items-center gap-3 py-2 opacity-60">
+                    <CheckCircle2 className="w-5 h-5 text-green-200" />
+                    <span className="font-bold text-sm line-through">{s.title}</span>
+                    <span className="text-xs opacity-70 ml-auto">{s.scheduled_time.substring(0, 5)}</span>
+                  </div>
+                ))}
               </div>
             )}
           </div>
-
-          {/* Missed Tasks Summary */}
-          {missedTasks.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-white/20">
-              <p className="text-xs font-black uppercase tracking-widest text-rose-200 mb-3">Missed Today ({missedTasks.length})</p>
-              {missedTasks.map(s => (
-                <div key={s.id} className="flex items-center gap-3 py-2 opacity-60">
-                  <XCircle className="w-5 h-5 text-rose-200" />
-                  <span className="font-bold text-sm line-through">{s.title}</span>
-                  <span className="text-xs opacity-70 ml-auto">{s.scheduled_time.substring(0, 5)}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Completed Tasks Summary */}
-          {completedTasks.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-white/20">
-              <p className="text-xs font-black uppercase tracking-widest text-green-200 mb-3">Completed ({completedTasks.length})</p>
-              {completedTasks.map(s => (
-                <div key={s.id} className="flex items-center gap-3 py-2 opacity-60">
-                  <CheckCircle2 className="w-5 h-5 text-green-200" />
-                  <span className="font-bold text-sm line-through">{s.title}</span>
-                  <span className="text-xs opacity-70 ml-auto">{s.scheduled_time.substring(0, 5)}</span>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
         </div>
-        <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
-      </div>
 
-      {nextMed?.next_dose && (
-        <NextMedicationCard
-          name={nextMed.name}
-          dosage={nextMed.dosage}
-          nextDoseIso={nextMed.next_dose}
-        />
-      )}
+        {nextMed?.next_dose && (
+          <NextMedicationCard
+            name={nextMed.name}
+            dosage={nextMed.dosage}
+            nextDoseIso={nextMed.next_dose}
+          />
+        )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button
-          onClick={() => setView('meds')}
-          className="bg-white p-6 sm:p-8 rounded-[40px] border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-4 hover:border-rose-200 transition-all group"
-        >
-          <div className="w-20 h-20 bg-blue-50 text-blue-500 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Pill className="w-10 h-10" />
-          </div>
-          <span className="text-2xl font-bold">My Medicines</span>
-        </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            onClick={() => setView('meds')}
+            className="bg-white p-6 sm:p-8 rounded-[40px] border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-4 hover:border-rose-200 transition-all group"
+          >
+            <div className="w-20 h-20 bg-blue-50 text-blue-500 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Pill className="w-10 h-10" />
+            </div>
+            <span className="text-2xl font-bold">My Medicines</span>
+          </button>
 
-        <button
-          className="bg-white p-6 sm:p-8 rounded-[40px] border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-4 hover:border-rose-200 transition-all group"
-        >
-          <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Phone className="w-10 h-10" />
-          </div>
-          <span className="text-2xl font-bold">Call Family</span>
-        </button>
-      </div>
+          <button
+            className="bg-white p-6 sm:p-8 rounded-[40px] border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-4 hover:border-rose-200 transition-all group"
+          >
+            <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Phone className="w-10 h-10" />
+            </div>
+            <span className="text-2xl font-bold">Call Family</span>
+          </button>
+        </div>
 
-      <div className="pt-4">
-        <button
-          onClick={onEmergency}
-          className="w-full py-10 bg-rose-600 text-white rounded-[40px] shadow-2xl shadow-rose-200 flex flex-col items-center justify-center gap-2 transition-all active:scale-95 group animate-pulse"
-        >
-          <ShieldAlert className="w-16 h-16 mb-2" />
-          <span className="text-4xl font-black uppercase tracking-tighter">Emergency Help</span>
-          <p className="text-rose-200 font-bold opacity-80 uppercase tracking-widest text-xs">Press if you need help</p>
-        </button>
-      </div>
-    </motion.div>
+        <div className="pt-4">
+          <button
+            onClick={onEmergency}
+            className="w-full py-10 bg-rose-600 text-white rounded-[40px] shadow-2xl shadow-rose-200 flex flex-col items-center justify-center gap-2 transition-all active:scale-95 group animate-pulse"
+          >
+            <ShieldAlert className="w-16 h-16 mb-2" />
+            <span className="text-4xl font-black uppercase tracking-tighter">Emergency Help</span>
+            <p className="text-rose-200 font-bold opacity-80 uppercase tracking-widest text-xs">Press if you need help</p>
+          </button>
+        </div>
+      </motion.div>
 
-    <VitalReadingModal
-      task={vitalTask}
-      open={!!vitalTask}
-      onClose={() => setVitalTask(null)}
-      onSubmit={handleVitalSubmit}
-      isSubmitting={vitalSubmitting}
-    />
+      <VitalReadingModal
+        task={vitalTask}
+        open={!!vitalTask}
+        onClose={() => setVitalTask(null)}
+        onSubmit={handleVitalSubmit}
+        isSubmitting={vitalSubmitting}
+      />
     </>
   );
 }
@@ -768,7 +768,7 @@ function ElderlyMeds({ meds, schedules, onBack }: { meds: any[], schedules: Dail
       <div className="relative pl-8 space-y-6">
         {/* Vertical Timeline Line */}
         <div className="absolute left-3 top-4 bottom-4 w-1 bg-gray-100 rounded-full" />
-        
+
         {displayMeds.sort((a, b) => dayjs(toLocalIso(a.next_dose) || 0).diff(dayjs(toLocalIso(b.next_dose) || 0))).map((med, i) => {
           const medTask = (schedules || []).find(
             (t) => t.type === 'medication' && t.original_id === med.id && !t.is_completed && !t.is_missed
@@ -776,49 +776,49 @@ function ElderlyMeds({ meds, schedules, onBack }: { meds: any[], schedules: Dail
           const canTake = medTask ? canElderlyComplete(medTask) : false;
 
           return (
-          <div key={med.id ?? i} className="relative bg-white p-5 sm:p-6 rounded-[32px] border border-gray-100 flex flex-col gap-4 shadow-sm">
-            <div className="absolute -left-9 top-8 w-6 h-6 rounded-full bg-rose-100 border-4 border-white flex items-center justify-center hidden sm:flex">
-              <div className="w-2 h-2 rounded-full bg-rose-500" />
-            </div>
-
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-4 min-w-0">
-                <div className={cn('w-16 h-16 sm:w-20 sm:h-20 rounded-3xl flex items-center justify-center shrink-0 bg-gray-50', med.color || 'text-rose-500')}>
-                  <Pill className="w-8 h-8 sm:w-10 sm:h-10" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xl sm:text-2xl font-bold truncate">{med.name}</p>
-                  <p className="text-rose-500 font-black">{med.dosage}</p>
-                </div>
+            <div key={med.id ?? i} className="relative bg-white p-5 sm:p-6 rounded-[32px] border border-gray-100 flex flex-col gap-4 shadow-sm">
+              <div className="absolute -left-9 top-8 w-6 h-6 rounded-full bg-rose-100 border-4 border-white flex items-center justify-center hidden sm:flex">
+                <div className="w-2 h-2 rounded-full bg-rose-500" />
               </div>
-              {med.next_dose && (
-                <LiveCountdown targetIso={med.next_dose} variant="med" label="Next dose" className="w-full sm:w-auto" />
-              )}
-            </div>
 
-            <div className="flex gap-3">
-              <button
-                type="button"
-                disabled={!canTake && !!medTask}
-                onClick={() => handleTakeMed(med)}
-                className={cn(
-                  'flex-1 min-h-[52px] py-3 rounded-2xl font-black text-sm flex items-center justify-center gap-2 touch-manipulation transition-all',
-                  canTake || !medTask
-                    ? 'bg-green-500 text-white active:scale-95'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className={cn('w-16 h-16 sm:w-20 sm:h-20 rounded-3xl flex items-center justify-center shrink-0 bg-gray-50', med.color || 'text-rose-500')}>
+                    <Pill className="w-8 h-8 sm:w-10 sm:h-10" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xl sm:text-2xl font-bold truncate">{med.name}</p>
+                    <p className="text-rose-500 font-black">{med.dosage}</p>
+                  </div>
+                </div>
+                {med.next_dose && (
+                  <LiveCountdown targetIso={med.next_dose} variant="med" label="Next dose" className="w-full sm:w-auto" />
                 )}
-              >
-                <CheckCircle2 className="w-5 h-5" />
-                {canTake ? 'Mark taken' : medTask ? 'Not due yet' : 'Mark taken'}
-              </button>
-            </div>
+              </div>
 
-            <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-              <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">Instructions</p>
-              <p className="font-medium text-gray-700">{med.instructions || 'No specific instructions.'}</p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  disabled={!canTake && !!medTask}
+                  onClick={() => handleTakeMed(med)}
+                  className={cn(
+                    'flex-1 min-h-[52px] py-3 rounded-2xl font-black text-sm flex items-center justify-center gap-2 touch-manipulation transition-all',
+                    canTake || !medTask
+                      ? 'bg-green-500 text-white active:scale-95'
+                      : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  )}
+                >
+                  <CheckCircle2 className="w-5 h-5" />
+                  {canTake ? 'Mark taken' : medTask ? 'Not due yet' : 'Mark taken'}
+                </button>
+              </div>
+
+              <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">Instructions</p>
+                <p className="font-medium text-gray-700">{med.instructions || 'No specific instructions.'}</p>
+              </div>
             </div>
-          </div>
-        );
+          );
         })}
         {displayMeds.length === 0 && <p className="text-center text-gray-400 py-12">No medications scheduled.</p>}
       </div>
@@ -1121,49 +1121,49 @@ function DailyTaskChecklist({ patientName }: { patientName: string }) {
   };
 
   return (
-  <>
-    <div className="bg-white p-6 sm:p-8 rounded-[40px] border border-gray-100">
-      <div className="flex items-center justify-between mb-6">
-        <h4 className="font-black text-gray-400 uppercase tracking-widest text-xs">Today&apos;s Care Tasks</h4>
-        <div className="flex gap-2">
-          <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-black">
-            {pendingCount} PENDING
-          </span>
-          {missedCount > 0 && (
-            <span className="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-black">
-              {missedCount} MISSED
+    <>
+      <div className="bg-white p-6 sm:p-8 rounded-[40px] border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <h4 className="font-black text-gray-400 uppercase tracking-widest text-xs">Today&apos;s Care Tasks</h4>
+          <div className="flex gap-2">
+            <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-black">
+              {pendingCount} PENDING
             </span>
+            {missedCount > 0 && (
+              <span className="px-3 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-black">
+                {missedCount} MISSED
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {activeTasks.map((s: DailyTask) => (
+            <TaskCard
+              key={s.id}
+              task={s}
+              variant="caregiver"
+              onComplete={() => completeTask(s.id, s.original_id, s.type, s.scheduled_time, { onBehalf: true })}
+              onMiss={() => markTaskMissed(s.id, s.original_id, s.type, s.title, s.scheduled_time)}
+              onRecordReading={() => setVitalTask(s)}
+            />
+          ))}
+          {activeTasks.length === 0 && (
+            <div className="py-8 text-center text-gray-400 italic text-sm">
+              All tasks for {patientName} are completed! ✨
+            </div>
           )}
         </div>
       </div>
 
-      <div className="space-y-3">
-        {activeTasks.map((s: DailyTask) => (
-          <TaskCard
-            key={s.id}
-            task={s}
-            variant="caregiver"
-            onComplete={() => completeTask(s.id, s.original_id, s.type, s.scheduled_time, { onBehalf: true })}
-            onMiss={() => markTaskMissed(s.id, s.original_id, s.type, s.title, s.scheduled_time)}
-            onRecordReading={() => setVitalTask(s)}
-          />
-        ))}
-        {activeTasks.length === 0 && (
-          <div className="py-8 text-center text-gray-400 italic text-sm">
-            All tasks for {patientName} are completed! ✨
-          </div>
-        )}
-      </div>
-    </div>
-
-    <VitalReadingModal
-      task={vitalTask}
-      open={!!vitalTask}
-      onClose={() => setVitalTask(null)}
-      onSubmit={handleVitalSubmit}
-      isSubmitting={vitalSubmitting}
-    />
-  </>
+      <VitalReadingModal
+        task={vitalTask}
+        open={!!vitalTask}
+        onClose={() => setVitalTask(null)}
+        onSubmit={handleVitalSubmit}
+        isSubmitting={vitalSubmitting}
+      />
+    </>
   );
 }
 
