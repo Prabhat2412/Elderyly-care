@@ -22,31 +22,35 @@ class CheckMissedSchedules extends Command
     private function checkRoutines()
     {
         $schedules = RoutineSchedule::where('is_active', true)->with('user')->get();
-
         foreach ($schedules as $schedule) {
             $userTz = $schedule->user->timezone ?? 'UTC';
             $nowTz = Carbon::now($userTz);
             $todayTz = $nowTz->toDateString();
-            
-            $scheduledTime = Carbon::createFromFormat('H:i:s', $schedule->scheduled_time, $userTz);
-            $diff = $nowTz->diffInMinutes($scheduledTime, false);
-            
-            $completed = CompletedTask::where('user_id', $schedule->user_id)
-                ->where('task_type', 'routine')
-                ->where('task_id', $schedule->id)
-                ->where('completed_at_date', $todayTz)
-                ->exists();
 
-            if ($completed) continue;
+            $times = [];
+            if ($schedule->frequency_data && isset($schedule->frequency_data['times'])) {
+                $times = $schedule->frequency_data['times'];
+            } elseif ($schedule->scheduled_time) {
+                $times = [$schedule->scheduled_time];
+            } else {
+                continue;
+            }
 
-            $this->processEscalation(
-                $schedule->user_id, 
-                $schedule->title, 
-                $schedule->scheduled_time, 
-                $diff, 
-                $todayTz,
-                'routine'
-            );
+            foreach ($times as $time) {
+                $formattedTime = strlen($time) === 5 ? $time . ':00' : $time;
+                $scheduledTime = Carbon::createFromFormat('H:i:s', $formattedTime, $userTz);
+                $diff = $nowTz->diffInMinutes($scheduledTime, false);
+
+                $completed = CompletedTask::where('user_id', $schedule->user_id)
+                    ->where('task_type', 'routine')
+                    ->where('task_id', $schedule->id)
+                    ->where('scheduled_time', $formattedTime)
+                    ->where('completed_at_date', $todayTz)
+                    ->exists();
+
+                if ($completed) continue;
+                $this->processEscalation($schedule->user_id, $schedule->title, $formattedTime, $diff, $todayTz, 'routine');
+            }
         }
     }
 

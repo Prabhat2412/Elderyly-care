@@ -5,8 +5,18 @@ namespace App\Services;
 use App\Models\CheckIn;
 use Illuminate\Support\Facades\Http;
 
+use App\Contracts\AIProviderInterface;
+use Illuminate\Support\Facades\Log;
+
 class AIReportService
 {
+    protected $aiProvider;
+
+    public function __construct(AIProviderInterface $aiProvider)
+    {
+        $this->aiProvider = $aiProvider;
+    }
+
     public function generateSummary($userId)
     {
         $checkins = CheckIn::where('user_id', $userId)
@@ -26,36 +36,21 @@ class AIReportService
         $prompt .= "Weekly Check-ins: " . $checkins->toJson() . "\n";
         $prompt .= "30-Day Vitals (BP, Glucose, etc): " . $healthLogs->toJson() . "\n";
         $prompt .= "Provide predictive risk assessment based on any trends (e.g. rising glucose or blood pressure).";
+        $prompt .= "\nIMPORTANT: Return ONLY a valid JSON object matching the structure: {\"summary\": \"string describing patient history and trend analysis\", \"recommendations\": [\"array of string recommendations\"], \"concern_level\": \"low|medium|high\"}. Do not wrap in markdown or backticks.";
 
-        $apiKey = env('GEMINI_API_KEY');
-        if ($apiKey && $apiKey !== 'placeholder') {
-            try {
-                $response = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}", [
-                    'contents' => [
-                        [
-                            'parts' => [
-                                ['text' => $prompt . "\nIMPORTANT: Return ONLY a valid JSON object matching the structure: {\"summary\": \"string describing patient history and trend analysis\", \"recommendations\": [\"array of string recommendations\"], \"concern_level\": \"low|medium|high\"}"]
-                            ]
-                        ]
-                    ],
-                    'generationConfig' => [
-                        'responseMimeType' => 'application/json'
-                    ]
-                ]);
-
-                if ($response->successful()) {
-                    $json = $response->json();
-                    $text = $json['candidates'][0]['content']['parts'][0]['text'] ?? '';
-                    $data = json_decode($text, true);
-                    if ($data && isset($data['summary'])) {
-                        return $data;
-                    }
-                }
-            } catch (\Exception $e) {
-                // Fall back silently
+        try {
+            $response = $this->aiProvider->generateResponse($prompt);
+            
+            // Clean up possible markdown code blocks from the response
+            $response = preg_replace('/```json\s*/', '', $response);
+            $response = preg_replace('/```\s*/', '', $response);
+            
+            $data = json_decode(trim($response), true);
+            if ($data && isset($data['summary'])) {
+                return $data;
             }
+        } catch (\Exception $e) {
+            Log::error("AI Report generation failed: " . $e->getMessage());
         }
 
         // Context-aware dynamic mock fallback if Gemini is unavailable

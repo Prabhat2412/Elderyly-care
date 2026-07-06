@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
+import { useDataStore } from '../store/useDataStore';
 import toast from 'react-hot-toast';
 
 const api = axios.create({
@@ -26,6 +27,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       toast.error('Session expired. Please login again.');
       useAuthStore.getState().logout();
+      useDataStore.getState().reset();
     } else {
       toast.error(message);
     }

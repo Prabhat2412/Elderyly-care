@@ -1,0 +1,25 @@
+const fs = require('fs');
+const lines = fs.readFileSync('src/App.tsx', 'utf-8').split('\n');
+const imports = `import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Clock, Phone, Bell, Activity, Pill, Home, FileText, ChevronRight, Smile, ShieldAlert, CheckCircle2, Heart, AlertCircle, Trash, UserCircle } from 'lucide-react';
+import { cn } from '../lib/utils';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+import { useAuthStore } from '../store/useAuthStore';
+import { useDataStore } from '../store/useDataStore';
+import { TimelineView } from './TimelineView';
+import { TaskCard } from './TaskCard';
+import { VitalReadingModal } from './VitalReadingModal';
+import { VitalReadingForm } from './VitalReadingForm';
+import { toLocalIso, computeAdherencePercent } from '../lib/taskTiming';
+import { DailyCheckIn, DailyTask, CaregiverAlert } from '../types';
+import { VitalReadingPayload } from '../lib/vitalMetrics';
+import api from '../lib/api';
+
+`;
+let dashboardLines = lines.slice(888, 1795).join('\n');
+dashboardLines = dashboardLines.replace(/function CaregiverDashboard/g, 'export function CaregiverDashboard');
+dashboardLines = dashboardLines.replace(/function FamilyDashboard/g, 'export function FamilyDashboard');
+fs.writeFileSync('src/components/DashboardComponents.tsx', imports + dashboardLines);

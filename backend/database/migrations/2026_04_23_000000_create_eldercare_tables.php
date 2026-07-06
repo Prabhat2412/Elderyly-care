@@ -44,6 +44,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // Reserved for future use.
         Schema::create('emergency_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
@@ -51,6 +52,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // Reserved for future use.
         Schema::create('health_summaries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();

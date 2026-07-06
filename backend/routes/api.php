@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\EmergencyController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MedicationController;
 use App\Http\Controllers\PatientController;
 
@@ -13,8 +14,10 @@ Route::get('/health', function () {
     return response()->json(['status' => 'ok', 'timestamp' => now()]);
 });
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:3,1');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:3,1');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -22,8 +25,14 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    Route::post('/emergency', [EmergencyController::class, 'trigger']);
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show']);
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
+    Route::post('/profile/change-password', [\App\Http\Controllers\ProfileController::class, 'changePassword']);
+
+    Route::post('/emergency', [EmergencyController::class, 'trigger'])->middleware('throttle:5,1');
     Route::post('/checkin', [CheckInController::class, 'store']);
+    Route::post('/location', [LocationController::class, 'store']);
+    Route::get('/location/{userId}', [LocationController::class, 'show']);
     
     Route::get('/medications', [MedicationController::class, 'index']);
     Route::post('/medications', [MedicationController::class, 'store']);
@@ -52,4 +61,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/schedules', [\App\Http\Controllers\RoutineScheduleController::class, 'store']);
     Route::post('/schedules/{schedule}/complete', [\App\Http\Controllers\RoutineScheduleController::class, 'complete']);
     Route::post('/schedules/{schedule}/miss', [\App\Http\Controllers\RoutineScheduleController::class, 'miss']);
+
+    Route::middleware('admin')->prefix('admin')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard']);
+        Route::get('/users', [\App\Http\Controllers\Admin\AdminController::class, 'users']);
+        Route::get('/users/{user}', [\App\Http\Controllers\Admin\AdminController::class, 'showUser']);
+        Route::put('/users/{user}', [\App\Http\Controllers\Admin\AdminController::class, 'updateUser']);
+        Route::delete('/users/{user}', [\App\Http\Controllers\Admin\AdminController::class, 'deleteUser']);
+        Route::get('/users/{user}/relationships', [\App\Http\Controllers\Admin\AdminController::class, 'userRelationships']);
+        
+        Route::get('/analytics', [\App\Http\Controllers\AnalyticsController::class, 'systemAnalytics']);
+        Route::get('/reports/tasks', [\App\Http\Controllers\ReportController::class, 'exportTasks']);
+    });
+    
+    Route::get('/users/{user}/adherence', [\App\Http\Controllers\AnalyticsController::class, 'patientAdherence']);
 });

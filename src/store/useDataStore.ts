@@ -42,6 +42,8 @@ interface DataState {
   chatHistory: any[];
   sendChatMessage: (userId: number, message: string) => Promise<void>;
   clearChatHistory: () => void;
+  selectedAIProvider: 'nvidia' | 'openrouter' | 'groq' | 'gemini';
+  setSelectedAIProvider: (provider: 'nvidia' | 'openrouter' | 'groq' | 'gemini') => void;
   aiSummary: { summary: string; recommendations: string[]; concern_level: string } | null;
   fetchAiSummary: (userId: number) => Promise<void>;
   safeZoneActive: boolean;
@@ -49,6 +51,7 @@ interface DataState {
   timelineEvents: TimelineEvent[];
   timelineLoading: boolean;
   fetchTimeline: (patientId: number, date?: string) => Promise<void>;
+  reset: () => void;
 }
 
 function normalizeAlert(alert: any): CaregiverAlert {
@@ -73,6 +76,23 @@ export const useDataStore = create<DataState>((set, get) => ({
   safeZoneActive: true,
   timelineEvents: [],
   timelineLoading: false,
+  selectedAIProvider: 'openrouter',
+  setSelectedAIProvider: (provider) => set({ selectedAIProvider: provider }),
+
+  reset: () => set({
+    medications: [],
+    checkins: [],
+    alerts: [],
+    patients: [],
+    activePatient: null,
+    medicalProfile: null,
+    healthLogs: [],
+    schedules: [],
+    chatHistory: [],
+    aiSummary: null,
+    timelineEvents: [],
+    timelineLoading: false,
+  }),
 
   toggleSafeZone: () => {
     const currentState = get().safeZoneActive;
@@ -407,6 +427,7 @@ export const useDataStore = create<DataState>((set, get) => ({
       const response = await api.post(`/patients/${userId}/chatbot`, {
         message,
         history: historyToSend,
+        provider: get().selectedAIProvider,
       });
       const botMsg = { sender: 'bot', text: response.data.reply, timestamp: new Date() };
       set((state) => ({ chatHistory: [...state.chatHistory, botMsg] }));

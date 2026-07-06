@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Heart, Shield, Users, ArrowRight, Activity, Bell, Smartphone } from 'lucide-react';
 import { cn } from './lib/utils';
 
-export function LandingPage({ onGetStarted, isAuthenticated = false }: { onGetStarted: () => void, isAuthenticated?: boolean }) {
+export function LandingPage({ onNavigate, isAuthenticated = false }: { onNavigate: (view: 'elderly-login' | 'caregiver-login' | 'family-login' | 'dashboard') => void, isAuthenticated?: boolean }) {
   return (
     <div className="min-h-screen bg-white overflow-hidden">
       {/* Navigation */}
@@ -16,10 +16,10 @@ export function LandingPage({ onGetStarted, isAuthenticated = false }: { onGetSt
             <span className="text-xl font-black tracking-tighter">ElderCare Connect</span>
           </div>
           <button 
-            onClick={onGetStarted}
+            onClick={() => onNavigate(isAuthenticated ? 'dashboard' : 'caregiver-login')}
             className="px-6 py-2 bg-gray-900 text-white rounded-full font-bold text-sm hover:bg-gray-800 transition-all"
           >
-            {isAuthenticated ? 'Dashboard' : 'Sign In'}
+            {isAuthenticated ? 'Dashboard' : 'Caregiver Portal'}
           </button>
         </div>
       </nav>
@@ -42,16 +42,27 @@ export function LandingPage({ onGetStarted, isAuthenticated = false }: { onGetSt
               Empowering independent living through specialized health monitoring, 
               automated medication tracking, and seamless family connectivity.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 flex-wrap">
               <button 
-                onClick={onGetStarted}
+                onClick={() => onNavigate(isAuthenticated ? 'dashboard' : 'elderly-login')}
                 className="w-full sm:w-auto px-10 py-5 bg-rose-500 text-white rounded-[32px] font-black text-lg shadow-2xl shadow-rose-200 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
-                {isAuthenticated ? 'Go to Dashboard' : 'Get Started'} <ArrowRight className="w-6 h-6" />
+                {isAuthenticated ? 'Go to Dashboard' : 'Login as Elderly'} <ArrowRight className="w-6 h-6" />
               </button>
-              <button className="w-full sm:w-auto px-10 py-5 bg-gray-50 text-gray-900 rounded-[32px] font-black text-lg hover:bg-gray-100 transition-all">
-                Learn More
+              <button 
+                onClick={() => onNavigate(isAuthenticated ? 'dashboard' : 'caregiver-login')}
+                className="w-full sm:w-auto px-10 py-5 bg-gray-900 text-white rounded-[32px] font-black text-lg shadow-2xl shadow-gray-300 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+              >
+                {isAuthenticated ? 'Go to Dashboard' : 'Login as Caregiver'} <Shield className="w-6 h-6" />
               </button>
+              {!isAuthenticated && (
+                <button 
+                  onClick={() => onNavigate('family-login')}
+                  className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-[32px] font-black text-lg shadow-2xl shadow-indigo-200 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                  Login as Family Member <Heart className="w-6 h-6" />
+                </button>
+              )}
             </div>
           </motion.div>
         </div>

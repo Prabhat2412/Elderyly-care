@@ -12,6 +12,10 @@ class EmergencyController extends Controller
     {
         $user = User::find($request->user_id);
         
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        
         // In a real app, this would send SMS/Push notifications
         Log::emergency("EMERGENCY SIGNAL FROM: " . ($user->name ?? 'Unknown User'));
         

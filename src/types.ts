@@ -51,7 +51,7 @@ export interface UserProfile {
   id: number;
   email: string;
   name: string;
-  role: 'elderly' | 'caregiver' | 'family';
+  role: 'elderly' | 'caregiver' | 'family' | 'admin';
   caregiverId?: string; // If role is elderly
   elderlyIds?: string[]; // If role is caregiver or family
   hospitalName?: string;
