@@ -10,6 +10,7 @@ export interface DailyCheckIn {
   inPain: boolean;
   mood: 'great' | 'good' | 'okay' | 'bad' | 'terrible';
   notes?: string;
+  created_at?: string;
 }
 
 export interface CaregiverAlert {

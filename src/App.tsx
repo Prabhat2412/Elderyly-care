@@ -221,7 +221,7 @@ export default function App() {
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-rose-200">
             <Heart className="text-white w-6 h-6" />
           </div>
-          <span className="font-black text-xl tracking-tighter">ElderCare Connect</span>
+          <span className="font-black text-xl tracking-tighter">ElderCare</span>
         </div>
 
         <div className="flex items-center gap-4 relative">
@@ -291,7 +291,7 @@ export default function App() {
       <main className="max-w-4xl mx-auto p-4 sm:p-6 pb-24">
         <AnimatePresence mode="wait">
           {view === 'landing' ? (
-            <LandingPage onGetStarted={() => setView(user.role === 'elderly' ? 'home' : 'dashboard')} isAuthenticated={true} />
+            <LandingPage onNavigate={() => setView(user.role === 'elderly' ? 'home' : 'dashboard')} isAuthenticated={true} />
           ) : view === 'account-settings' ? (
             <AccountSettingsScreen />
           ) : view === 'profile' ? (

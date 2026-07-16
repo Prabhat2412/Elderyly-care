@@ -46,7 +46,7 @@ class OpenRouterServiceProvider implements AIProviderInterface
         $patientName = $activePatient ? ($activePatient['name'] ?? 'the patient') : 'the patient';
         $history = $context['history'] ?? [];
         
-        $systemContent = "You are CareBuddy, a highly advanced, compassionate, and knowledgeable AI health assistant for ElderCare Connect.\n";
+        $systemContent = "You are CareBuddy, a highly advanced, compassionate, and knowledgeable AI health assistant for ElderCare .\n";
         
         if ($role === 'caregiver') {
             $systemContent .= "You are currently speaking to a CAREGIVER named {$currentUserName}. You must provide professional, actionable, and accurate advice to help them manage their patients.\n";
@@ -143,7 +143,7 @@ class OpenRouterServiceProvider implements AIProviderInterface
         $headers = [
             'Authorization' => 'Bearer ' . $this->apiKey,
             'HTTP-Referer' => config('app.url', 'http://localhost'),
-            'X-Title' => 'ElderCare Connect',
+            'X-Title' => 'ElderCare',
         ];
 
         // Retry up to 3 times with backoff for rate-limited (429) responses

@@ -1,5 +1,5 @@
 {
-  "name": "ElderCare Connect",
+  "name": "ElderCare ",
   "short_name": "ElderCare",
   "description": "Specialized health monitoring and family connectivity for seniors.",
   "start_url": "/",
@@ -26,7 +26,7 @@
       "sizes": "1000x1000",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "ElderCare Connect Dashboard"
+      "label": "ElderCare  Dashboard"
     }
   ]
 }

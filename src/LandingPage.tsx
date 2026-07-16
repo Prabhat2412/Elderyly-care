@@ -13,9 +13,9 @@ export function LandingPage({ onNavigate, isAuthenticated = false }: { onNavigat
             <div className="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center">
               <Heart className="text-white w-6 h-6" />
             </div>
-            <span className="text-xl font-black tracking-tighter">ElderCare Connect</span>
+            <span className="text-xl font-black tracking-tighter">ElderCare </span>
           </div>
-          <button 
+          <button
             onClick={() => onNavigate(isAuthenticated ? 'dashboard' : 'caregiver-login')}
             className="px-6 py-2 bg-gray-900 text-white rounded-full font-bold text-sm hover:bg-gray-800 transition-all"
           >
@@ -39,24 +39,24 @@ export function LandingPage({ onNavigate, isAuthenticated = false }: { onNavigat
               Care that feels like <span className="text-rose-500 underline decoration-rose-200 underline-offset-8">family.</span>
             </h1>
             <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-12 font-medium leading-relaxed">
-              Empowering independent living through specialized health monitoring, 
+              Empowering independent living through specialized health monitoring,
               automated medication tracking, and seamless family connectivity.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 flex-wrap">
-              <button 
+              <button
                 onClick={() => onNavigate(isAuthenticated ? 'dashboard' : 'elderly-login')}
                 className="w-full sm:w-auto px-10 py-5 bg-rose-500 text-white rounded-[32px] font-black text-lg shadow-2xl shadow-rose-200 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 {isAuthenticated ? 'Go to Dashboard' : 'Login as Elderly'} <ArrowRight className="w-6 h-6" />
               </button>
-              <button 
+              <button
                 onClick={() => onNavigate(isAuthenticated ? 'dashboard' : 'caregiver-login')}
                 className="w-full sm:w-auto px-10 py-5 bg-gray-900 text-white rounded-[32px] font-black text-lg shadow-2xl shadow-gray-300 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 {isAuthenticated ? 'Go to Dashboard' : 'Login as Caregiver'} <Shield className="w-6 h-6" />
               </button>
               {!isAuthenticated && (
-                <button 
+                <button
                   onClick={() => onNavigate('family-login')}
                   className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-[32px] font-black text-lg shadow-2xl shadow-indigo-200 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
                 >
@@ -71,21 +71,21 @@ export function LandingPage({ onNavigate, isAuthenticated = false }: { onNavigat
       {/* Feature Grid */}
       <section className="py-20 px-6 bg-gray-50">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          <FeatureCard 
-            icon={<Activity />} 
-            title="Health Vitals" 
+          <FeatureCard
+            icon={<Activity />}
+            title="Health Vitals"
             desc="Track blood pressure, glucose, and heart rate with comprehensive trend analysis."
             color="bg-rose-500"
           />
-          <FeatureCard 
-            icon={<Bell />} 
-            title="Smart Alerts" 
+          <FeatureCard
+            icon={<Bell />}
+            title="Smart Alerts"
             desc="Instant notifications for missed medications or unexpected behavior shifts."
             color="bg-amber-500"
           />
-          <FeatureCard 
-            icon={<Smartphone />} 
-            title="Family Sync" 
+          <FeatureCard
+            icon={<Smartphone />}
+            title="Family Sync"
             desc="Keep loved ones informed with a real-time 'Peace of Mind' dashboard."
             color="bg-indigo-500"
           />
@@ -109,7 +109,7 @@ export function LandingPage({ onNavigate, isAuthenticated = false }: { onNavigat
             <div className="relative">
               <div className="aspect-square bg-rose-100 rounded-[80px] rotate-3 absolute inset-0 blur-3xl opacity-50" />
               <div className="relative bg-white border border-gray-100 p-8 rounded-[60px] shadow-2xl">
-                 <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000&auto=format&fit=crop" className="rounded-[40px] grayscale-0" alt="Elderly care" />
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000&auto=format&fit=crop" className="rounded-[40px] grayscale-0" alt="Elderly care" />
               </div>
             </div>
           </div>
@@ -123,9 +123,9 @@ export function LandingPage({ onNavigate, isAuthenticated = false }: { onNavigat
             <div className="w-8 h-8 bg-rose-500 rounded-lg flex items-center justify-center">
               <Heart className="text-white w-5 h-5" />
             </div>
-            <span className="text-lg font-black tracking-tighter">ElderCare Connect</span>
+            <span className="text-lg font-black tracking-tighter">ElderCare</span>
           </div>
-          <p className="text-gray-400 text-sm font-medium">© 2026 ElderCare Connect. All rights reserved.</p>
+          <p className="text-gray-400 text-sm font-medium">© 2026 ElderCare . All rights reserved.</p>
         </div>
       </footer>
     </div>

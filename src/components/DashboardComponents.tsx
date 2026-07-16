@@ -25,7 +25,7 @@ export function CaregiverDashboard({ view, setView, checkins, alerts, medication
 }) {
   const [activeTab, setActiveTab] = useState<'overview' | 'medical'>('overview');
   const { patients, activePatient, setActivePatient, fetchMeds, healthLogs, safeZoneActive, schedules } = useDataStore();
-  const [patientLocation, setPatientLocation] = useState<{lat: number, lng: number, timestamp: string} | null>(null);
+  const [patientLocation, setPatientLocation] = useState<{ lat: number, lng: number, timestamp: string } | null>(null);
   const activeAlerts = alerts.filter(a => !a.resolved);
   const adherencePercent = computeAdherencePercent(schedules || []);
 
@@ -39,13 +39,19 @@ export function CaregiverDashboard({ view, setView, checkins, alerts, medication
 
   useEffect(() => {
     if (!activePatient) return;
-    
+
     // Poll location every 30 seconds
     const fetchLocation = async () => {
       try {
         const res = await api.get(`/location/${activePatient.id}`);
-        if (res.data) setPatientLocation(res.data);
-      } catch(e) {}
+        if (res.data && (res.data.latitude !== undefined || res.data.lat !== undefined)) {
+          setPatientLocation({
+            lat: res.data.latitude ?? res.data.lat,
+            lng: res.data.longitude ?? res.data.lng,
+            timestamp: res.data.recorded_at ?? res.data.timestamp
+          });
+        }
+      } catch (e) { }
     };
     fetchLocation();
     const interval = setInterval(fetchLocation, 30000);
@@ -125,9 +131,9 @@ export function CaregiverDashboard({ view, setView, checkins, alerts, medication
 
               {patientLocation && (
                 <div className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm mb-4 mt-4">
-                   <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Live Coordinates</p>
-                   <p className="font-bold text-gray-700">Lat: {patientLocation.lat.toFixed(4)}, Lng: {patientLocation.lng.toFixed(4)}</p>
-                   <p className="text-[10px] text-gray-400 mt-1">Updated {dayjs(patientLocation.timestamp).fromNow()}</p>
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Live Coordinates</p>
+                  <p className="font-bold text-gray-700">Lat: {patientLocation.lat.toFixed(4)}, Lng: {patientLocation.lng.toFixed(4)}</p>
+                  <p className="text-[10px] text-gray-400 mt-1">Updated {dayjs(patientLocation.timestamp).fromNow()}</p>
                 </div>
               )}
 
@@ -778,7 +784,7 @@ export function FamilyDashboard({ view, setView, checkins, alerts, medications }
       try {
         const res = await api.get(`/location/${activePatient.id}`);
         if (res.data) setPatientLocation(res.data);
-      } catch (e) {}
+      } catch (e) { }
       finally { setLocationLoading(false); }
     };
     fetch();
@@ -902,7 +908,7 @@ export function FamilyDashboard({ view, setView, checkins, alerts, medications }
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Last Mood Check-in</p>
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-2xl">
-              {lastCheckin.mood === 'Happy' ? '😊' : lastCheckin.mood === 'Neutral' ? '😐' : '😔'}
+              {lastCheckin.mood === 'great' ? '😁' : lastCheckin.mood === 'good' ? '😊' : lastCheckin.mood === 'okay' ? '😐' : lastCheckin.mood === 'bad' ? '😔' : '😭'}
             </div>
             <div>
               <p className="font-black text-gray-800">{lastCheckin.mood}</p>
@@ -957,7 +963,7 @@ function StatCard({ label, value, icon, color }: { label: string, value: string,
   return (
     <div className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex items-center gap-4">
       <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center bg-gray-50", color)}>
-        {React.cloneElement(icon as React.ReactElement, { className: "w-6 h-6" })}
+        {React.cloneElement(icon as React.ReactElement<{ className?: string }>, { className: "w-6 h-6" })}
       </div>
       <div>
         <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{label}</p>
@@ -1084,4 +1090,4 @@ function MedicationForm({ initialData, onSave, onCancel }: { initialData?: any, 
     </motion.div>
   );
 }
-
+
